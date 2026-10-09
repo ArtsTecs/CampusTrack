@@ -12,6 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.format.annotation.DateTimeFormat;
+import java.time.LocalDate;
+
 /**
  * <h4>NOTE: DO NOT VIOLATE LAYERS STRUCTURE.</h4>
  *
@@ -44,6 +47,34 @@ public class BuildingController {
     @GetMapping
     public ResponseEntity<Page<BuildingResponseDto>> getAllBuildings(@PageableDefault(size = 20) Pageable pageable) {
         Page<BuildingResponseDto> buildings = buildingService.getAllBuildings(pageable);
+        return ResponseEntity.ok(buildings);
+    }
+
+    //Search
+    @GetMapping("/search")
+    public ResponseEntity<Page<BuildingResponseDto>> searchBuildings(
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate from,
+
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate to,
+
+            @RequestParam(required = false)
+            String name,
+
+            @PageableDefault(size = 20)
+            Pageable pageable
+    ) {
+        Page<BuildingResponseDto> buildings =
+                buildingService.searchBuildings(
+                        from,
+                        to,
+                        name,
+                        pageable
+                );
+
         return ResponseEntity.ok(buildings);
     }
 

@@ -9,7 +9,9 @@ import com.jabai.campustrack.Repositories.BuildingRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.data.jpa.domain.Specification;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -66,6 +68,31 @@ public class BuildingService {
                 .findById(id)
                 .orElseThrow(() -> new RowNotFoundException(String.format("Unable to find building with an ID of %d.", id)));
         buildingRepository.delete(building);
+    }
+
+    //Search
+    public Page<BuildingResponseDto> searchBuildings(
+            LocalDate from,
+            LocalDate to,
+            String name,
+            Pageable pageable
+    ) {
+        Specification<Building> specification = (root, query, cb) -> cb.conjunction();
+
+        if (from != null) {
+            specification = specification.and((root, query, cb) -> cb.greaterThanOrEqualTo(root.get("createdAt"), from.atStartOfDay()));
+        }
+        if (to != null) {
+            specification = specification.and(
+                    (root, query, cb) -> cb.lessThan(root.get("createdAt"), to.plusDays(1).atStartOfDay()));
+        }
+        if (name != null && !name.isBlank()) {
+            specification = specification.and(
+                    (root, query, cb) -> cb.like(cb.lower(root.get("name")), "%" + name.toLowerCase() + "%"));
+        }
+        return buildingRepository
+                .findAll(specification, pageable)
+                .map(this::buildBuildingResponseDto);
     }
 
     // ===== Service Utils =====
