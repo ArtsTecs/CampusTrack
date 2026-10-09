@@ -14,6 +14,10 @@ import com.jabai.campustrack.DTOs.Requests.CreateRoomRequestDto;
 import com.jabai.campustrack.DTOs.Requests.SearchRoomRequestDto;
 import com.jabai.campustrack.DTOs.Requests.UpdateRoomRequestDto;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -58,18 +62,24 @@ public class RoomService {
 
     // Search
     public Page<RoomResponseDto> searchRooms(SearchRoomRequestDto searchRoomsRequestDto, Pageable pageable) {
+        LocalDate fromDate  = searchRoomsRequestDto.getFrom();
+        LocalDate toDate = searchRoomsRequestDto.getTo();
         Long buildingId = searchRoomsRequestDto.getBuildingId();
         String roomNumber = searchRoomsRequestDto.getRoomNumber();
         Integer capacity = searchRoomsRequestDto.getCapacity();
         RoomType roomType = searchRoomsRequestDto.getRoomType();
         RoomCriticality criticality = searchRoomsRequestDto.getCriticality();
 
+        LocalDateTime from = fromDate != null ? fromDate.atStartOfDay() : null;
+        LocalDateTime to = toDate != null ? toDate.atTime(LocalTime.MAX) : null;
+
         Specification<Room> spec = Specification
                 .where(RoomSpecifications.hasBuilding(buildingId))
                 .and(RoomSpecifications.hasRoomNumber(roomNumber))
                 .and(RoomSpecifications.hasCapacity(capacity))
                 .and(RoomSpecifications.hasRoomType(roomType))
-                .and(RoomSpecifications.hasCriticality(criticality));
+                .and(RoomSpecifications.hasCriticality(criticality))
+                .and(RoomSpecifications.createdBetween(from, to));
 
         return roomRepository.findAll(spec, pageable)
             .map(this::buildRoomResponseDto);

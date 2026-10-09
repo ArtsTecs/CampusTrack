@@ -1,9 +1,6 @@
 package com.jabai.campustrack.Exceptions;
 
-import com.jabai.campustrack.Exceptions.CustomExceptions.EmailAlreadyExistException;
-import com.jabai.campustrack.Exceptions.CustomExceptions.EmailNotFoundException;
-import com.jabai.campustrack.Exceptions.CustomExceptions.InvalidCredentialsException;
-import com.jabai.campustrack.Exceptions.CustomExceptions.RowNotFoundException;
+import com.jabai.campustrack.Exceptions.CustomExceptions.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -61,5 +58,12 @@ public class GlobalExceptionHandler {
         Map<String,String> error = new HashMap<>();
         error.put("message", ex.getMessage());
         return ResponseEntity.status(404).body(error);
+    }
+
+    @ExceptionHandler(DuplicatedItemException.class)
+    public ResponseEntity<Map<String,String>> duplicatedRow(DuplicatedItemException ex){
+        Map<String,String> error = new HashMap<>();
+        error.put("message", ex.getMessage());
+        return ResponseEntity.status(409).body(error);
     }
 }

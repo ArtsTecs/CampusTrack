@@ -17,20 +17,7 @@ import com.jabai.campustrack.Services.RoomService;
 import jakarta.validation.Valid;
 
 /**
- * <h4>NOTE: DO NOT VIOLATE LAYERS STRUCTURE.</h4>
- *
- * <p>KYLE: Perform search by:</p>
- * <ul>
- *   <li>from (optional) -> Dapat naka format ha for example 2026-10-07 (CREATED AT) (NEW TASK)</li>
- *   <li>to (optional) -> Dapat naka format ha for example 2026-10-15 (CREATED AT) (NEW TASK)</li>
- *   <li>buildingId (optional)</li>
- *   <li>roomNumber (optional)</li>
- *   <li>capacity (optional)</li>
- *   <li>roomType (optional)</li>
- *   <li>criticality (optional)</li>
- * </ul>
- * <p>P.S.: And dapat naka paginate gihapon sya.</p>
- * <p>Expected URL: <code>/api/rooms/search?from=2026-10-07&to=2026-10-15&buildingId=1&roomNumber=69A&capacity=50&roomType=LABORATORY&criticality=HIGH</code></p>
+ * <h1>KYLE</h1>
  */
 @RestController
 @RequestMapping("/api/rooms")

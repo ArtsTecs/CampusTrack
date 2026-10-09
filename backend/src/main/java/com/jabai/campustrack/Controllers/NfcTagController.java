@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * <h1>CHARLES: What?</h1>
+ * <h1>CHARLES</h1>
  */
 @RestController
 @RequestMapping("/api/nfc-tags")
@@ -41,7 +41,7 @@ public class NfcTagController {
 
   // Read
   @GetMapping("/{id}")
-  public ResponseEntity<NfcTagResponseDto> read(@PathVariable  Long id) {
+  public ResponseEntity<NfcTagResponseDto> read(@PathVariable Long id) {
     NfcTagResponseDto nfcTagResponseDto = nfcTagService.read(id);
     return ResponseEntity.ok(nfcTagResponseDto);
   }

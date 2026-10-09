@@ -1,17 +1,22 @@
 package com.jabai.campustrack.DTOs.Requests;
 
 import com.jabai.campustrack.Models.Enums.MaintenanceRecordStatus;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class SearchMaintenanceRecordRequestDto {
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+  private final LocalDate completedFrom;
+
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+  private final LocalDate completedTo;
+
   private final Long incidentId;
   private final Long userId;
   private final String action;
   private final String remarks;
   private final MaintenanceRecordStatus status;
-  private final LocalDateTime completedFrom;
-  private final LocalDateTime completedTo;
 
   public SearchMaintenanceRecordRequestDto(
           Long incidentId,
@@ -19,8 +24,8 @@ public class SearchMaintenanceRecordRequestDto {
           String action,
           String remarks,
           MaintenanceRecordStatus status,
-          LocalDateTime completedFrom,
-          LocalDateTime completedTo
+          LocalDate completedFrom,
+          LocalDate completedTo
   ) {
     this.incidentId = incidentId;
     this.userId = userId;
@@ -37,6 +42,6 @@ public class SearchMaintenanceRecordRequestDto {
   public String getAction() { return action; }
   public String getRemarks() { return remarks; }
   public MaintenanceRecordStatus getStatus() { return status; }
-  public LocalDateTime getCompletedFrom() { return completedFrom; }
-  public LocalDateTime getCompletedTo() { return completedTo; }
+  public LocalDate getCompletedFrom() { return completedFrom; }
+  public LocalDate getCompletedTo() { return completedTo; }
 }

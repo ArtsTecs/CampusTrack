@@ -19,9 +19,10 @@ import com.jabai.campustrack.Repositories.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import java.time.LocalDateTime;
-import java.time.LocalDate;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Service
 public class MaintenanceRecordService {
@@ -123,13 +124,16 @@ public class MaintenanceRecordService {
 
     // Search
     public Page<MaintenanceRecordResponseDto> searchRecords(SearchMaintenanceRecordRequestDto searchMaintenanceRecordRequestDto, Pageable pageable) {
+        LocalDate completedFromDate = searchMaintenanceRecordRequestDto.getCompletedFrom();
+        LocalDate completedToDate = searchMaintenanceRecordRequestDto.getCompletedTo();
         Long incidentId = searchMaintenanceRecordRequestDto.getIncidentId();
         Long userId = searchMaintenanceRecordRequestDto.getUserId();
         String action = searchMaintenanceRecordRequestDto.getAction();
         String remarks = searchMaintenanceRecordRequestDto.getRemarks();
         MaintenanceRecordStatus status = searchMaintenanceRecordRequestDto.getStatus();
-        LocalDateTime completedFrom = searchMaintenanceRecordRequestDto.getCompletedFrom();
-        LocalDateTime completedTo = searchMaintenanceRecordRequestDto.getCompletedTo();
+
+        LocalDateTime completedFrom = completedFromDate != null ? completedFromDate.atStartOfDay() : null;
+        LocalDateTime completedTo = completedToDate != null ? completedToDate.atTime(LocalTime.MAX) : null;
 
         // Call the new Specification class
         Specification<MaintenanceRecord> spec = Specification

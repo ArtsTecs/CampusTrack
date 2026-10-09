@@ -1,40 +1,28 @@
+import { AssetCategoryEnum, AssetConditionEnum, AssetCriticalityEnum, AssetStatusEnum, NfcTagStatusEnum } from "@/types/enums.types";
+
 // Nfc Tag Model
 export type NfcTag = {
   id: number;
   createdAt: string;
-  assetId: number;
   uid: string;
-  status: string;
-
-  // Relationships
-  asset: Asset | null;
+  status: NfcTagStatusEnum;
+  asset: Asset;
 };
 
 // Asset Model
 export type Asset = {
-  "id": number;
-  "roomId": number;
-  "name": string;
-  "brand": string | null;
-  "model": string | null;
-  "serialNumber": string | null;
-  "category": string;
-  "status": string;
-  "condition": string;
-  "criticality": string;
-  "createdAt": string;
+  brand: string | null;
+  model: string | null;
+  serialNumber: string | null;
 
-  // Relationships
+  category: AssetCategoryEnum;
+  condition: AssetConditionEnum;
+  criticality: AssetCriticalityEnum;
+  status: AssetStatusEnum;
+
+  createdAt: string;
+  id: number;
+  name: string;
+  room: null;
+  roomId: number | null;
 };
-
-// Building Model
-
-// Incident Model
-
-// Maintenance Record Model
-
-// Room Model
-
-// User Model
-
-// Auth Model

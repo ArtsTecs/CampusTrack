@@ -18,6 +18,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 @Service
 public class NfcTagService {
   private final NfcTagRepository nfcTagRepository;
@@ -65,14 +69,20 @@ public class NfcTagService {
 
   // Search
   public Page<NfcTagResponseDto> search(SearchNfcTagRequestDto searchNfcTagRequestDto, Pageable pageable) {
+    LocalDate fromDate = searchNfcTagRequestDto.getFrom();
+    LocalDate toDate = searchNfcTagRequestDto.getTo();
     Long assetId = searchNfcTagRequestDto.getAssetId();
     String uid = searchNfcTagRequestDto.getUid();
     NfcTagStatus status = searchNfcTagRequestDto.getStatus();
 
+    LocalDateTime from = fromDate != null ? fromDate.atStartOfDay() : null;
+    LocalDateTime to = toDate != null ? toDate.atTime(LocalTime.MAX) : null;
+
     Specification<NfcTag> specification = Specification
             .where(NfcTagSpecifications.hasAssetId(assetId))
             .and(NfcTagSpecifications.hasUid(uid))
-            .and(NfcTagSpecifications.hasStatus(status));
+            .and(NfcTagSpecifications.hasStatus(status))
+            .and(NfcTagSpecifications.betweenCreated(from, to));
 
     return nfcTagRepository
             .findAll(specification, pageable)
